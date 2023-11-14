@@ -10,7 +10,10 @@ import (
 )
 
 func main() {
-	fx.New().Run()
+	fx.New(
+		fx.Provide(),
+		fx.Invoke(newFiberServer),
+	).Run()
 }
 
 func newFiberServer(lc fx.Lifecycle) *fiber.App {
@@ -19,7 +22,7 @@ func newFiberServer(lc fx.Lifecycle) *fiber.App {
 	app.Use(cors.New())
 	app.Use(logger.New())
 
-	_ := app.Group("/todo")
+	_ = app.Group("/todo")
 	//todoGroup.Get("/:id", handlers.CreateTodo)
 
 	lc.Append(fx.Hook{
@@ -33,4 +36,6 @@ func newFiberServer(lc fx.Lifecycle) *fiber.App {
 			return app.Shutdown()
 		},
 	})
+
+	return app
 }
