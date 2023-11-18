@@ -2,35 +2,39 @@ package config
 
 import (
 	"github.com/joho/godotenv"
+	"log"
 	"os"
-	"strconv"
 )
 
-type EnvVars struct {
-	DSN           string
-	RedisAddr     string
-	RedisPassword string
-	RedisDb       int
+type ToDoServiceConfig struct {
+	MysqlDB Database
 }
 
-func LoadEnv() EnvVars {
+type Database struct {
+	Driver   string
+	Url      string
+	Username string
+	Password string
+	DBName   string
+}
+
+func LoadEnv() ToDoServiceConfig {
 	if err := godotenv.Load(); err != nil {
-		panic("cannot load the config file as env variables")
+		log.Fatal("cannot load the config file as env variables")
 	}
 
-	dsn := os.Getenv("DSN")
-	redisAddr := os.Getenv("REDIS_ADDR")
-	redisPass := os.Getenv("REDIS_PASSWORD")
-	redisDb := os.Getenv("REDIS_DB")
-	parsedRedisDb, err := strconv.Atoi(redisDb)
-	if err != nil {
-		panic("cannot parse redis DB number")
-	}
+	mysqlUsername := os.Getenv("DB_USER")
+	mysqlPassword := os.Getenv("DB_PASSWORD")
+	mysqlHost := os.Getenv("DB_URL")
+	mysqlDBName := os.Getenv("DB_NAME")
 
-	return EnvVars{
-		DSN:           dsn,
-		RedisAddr:     redisAddr,
-		RedisPassword: redisPass,
-		RedisDb:       parsedRedisDb,
+	return ToDoServiceConfig{
+		MysqlDB: Database{
+			Driver:   "mysql",
+			Url:      mysqlHost,
+			Username: mysqlUsername,
+			Password: mysqlPassword,
+			DBName:   mysqlDBName,
+		},
 	}
 }
