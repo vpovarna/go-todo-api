@@ -6,14 +6,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/vpovarna/go-todo-api/config"
+	"github.com/vpovarna/go-todo-api/db"
 	"go.uber.org/fx"
 )
 
 func main() {
-	fx.New(
-		fx.Provide(),
-		fx.Invoke(newFiberServer),
-	).Run()
+	todoServiceConfig := config.LoadEnv()
+	_ = db.CreateMySQLConnection(todoServiceConfig)
+
+	//fx.New(
+	//	fx.Provide(),
+	//	fx.Invoke(newFiberServer),
+	//).Run()
 }
 
 func newFiberServer(lc fx.Lifecycle) *fiber.App {
@@ -21,9 +26,6 @@ func newFiberServer(lc fx.Lifecycle) *fiber.App {
 
 	app.Use(cors.New())
 	app.Use(logger.New())
-
-	_ = app.Group("/todo")
-	//todoGroup.Get("/:id", handlers.CreateTodo)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
