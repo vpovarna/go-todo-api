@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS todos (
     completed_at DATE
 );
 
-CREATE USER IF NOT EXISTS 'todoUser'@'localhost' IDENTIFIED BY 'SecretPassword';
-GRANT ALL PRIVILEGES ON todos.* TO 'todoUser'@'localhost';
+CREATE USER IF NOT EXISTS 'todoUser'@'%' IDENTIFIED BY 'SecretPassword';
+GRANT ALL PRIVILEGES ON todosDB.* TO 'todoUser'@'%';
+FLUSH PRIVILEGES;
