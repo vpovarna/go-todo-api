@@ -11,7 +11,7 @@ import (
 func CreateMySQLConnection(envVar config.ToDoServiceConfig) *sqlx.DB {
 	mysqlDB := envVar.MysqlDB
 
-	dsm := fmt.Sprintf("%s:%s@(%s)/%s", mysqlDB.Username, mysqlDB.Password, mysqlDB.Url, mysqlDB.DBName)
+	dsm := fmt.Sprintf("%s:%s@(%s)/%s?parseTime=true", mysqlDB.Username, mysqlDB.Password, mysqlDB.Url, mysqlDB.DBName)
 	db, err := sqlx.Connect(
 		mysqlDB.Driver,
 		dsm,
