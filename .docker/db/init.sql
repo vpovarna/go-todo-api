@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS todos (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     completed BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at DATE,
-    completed_at DATE
+    created_at DATETIME,
+    completed_at DATETIME
 );
 
 CREATE USER IF NOT EXISTS 'todoUser'@'%' IDENTIFIED BY 'SecretPassword';

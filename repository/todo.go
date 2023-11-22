@@ -27,6 +27,8 @@ type Todo struct {
 	CompletedAt time.Time `db:"completed_at"`
 }
 
+//TODO: Extract context as param.
+
 func (t *TodoRepository) CreateTodo(todoDAO domain.TodoDAO) (int, error) {
 	stmt := "INSERT INTO todos (title, description, completed, created_at, completed_at) VALUES (?,?,?,?,?)"
 
@@ -68,11 +70,17 @@ func (t *TodoRepository) CompleteTodo(todoId int) error {
 		return err
 	}
 
-	_, err = exec.LastInsertId()
+	n, err := exec.RowsAffected()
 	if err != nil {
 		return err
 	}
 
+	if n == 0 {
+		log.Infof("Todo with id: %d already completed", todoId)
+		return nil
+	}
+
+	log.Infof("Completed todo with id: %d", todoId)
 	return nil
 }
 
@@ -81,7 +89,7 @@ func (t *TodoRepository) DeleteTodo(todoId int) error {
 	exec, err := t.conn.Exec(stmt, todoId)
 
 	if err != nil {
-		log.Warn("Unable to delete todo with id: ", todoId)
+		log.Errorf("Unable to delete todo with id: ", todoId)
 		return err
 	}
 
@@ -92,4 +100,17 @@ func (t *TodoRepository) DeleteTodo(todoId int) error {
 
 	log.Info("Successfully deleted: ", rowsAffected)
 	return nil
+}
+
+func (t *TodoRepository) GetAllTodos() ([]Todo, error) {
+	var todos []Todo
+
+	stmt := "SELECT id, title, description, completed FROM todos"
+	err := t.conn.SelectContext(context.Background(), &todos, stmt)
+	if err != nil {
+		log.Warn("Unable to get all todos from the repository. Error:", err)
+		return nil, err
+	}
+
+	return todos, nil
 }
