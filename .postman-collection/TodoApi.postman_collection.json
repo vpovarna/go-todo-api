@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "ede5d069-dcc2-4a81-8046-80e7d79f691d",
+		"name": "TodoApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "445448"
+	},
+	"item": [
+		{
+			"name": "Get Todo By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:18081/api/todos/3"
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Todo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:18081/api/todos/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Todo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:18081/api/todos/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Todo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"My first todo\",\r\n    \"description\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:18081/api/todos"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Todos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:18081/api/todos"
+			},
+			"response": []
+		}
+	]
+}
