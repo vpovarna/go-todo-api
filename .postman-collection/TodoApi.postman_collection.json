@@ -71,6 +71,15 @@
 				"url": "http://localhost:18081/api/todos"
 			},
 			"response": []
+		},
+		{
+			"name": "HealtCheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:18081/health"
+			},
+			"response": []
 		}
 	]
 }
