@@ -5,14 +5,14 @@ import (
 	"github.com/vpovarna/go-todo-api/config"
 	"github.com/vpovarna/go-todo-api/db"
 	"github.com/vpovarna/go-todo-api/handlers"
+	"github.com/vpovarna/go-todo-api/repository"
 	"github.com/vpovarna/go-todo-api/router"
-	"github.com/vpovarna/go-todo-api/storage"
 )
 
 func main() {
 	todoServiceConfig := config.LoadEnv()
 	conn := db.CreateMySQLConnection(todoServiceConfig)
-	todoStorage := storage.NewTodoStorage(conn)
+	todoStorage := repository.NewTodoStorage(conn)
 	handler := handlers.NewTodoHandlers(todoStorage)
 
 	app := fiber.New()

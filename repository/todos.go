@@ -1,4 +1,4 @@
-package storage
+package repository
 
 import (
 	"context"
@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-type TodoStorage struct {
+type TodoRepository struct {
 	conn *sqlx.DB
 }
 
-func NewTodoStorage(conn *sqlx.DB) *TodoStorage {
-	return &TodoStorage{conn: conn}
+func NewTodoStorage(conn *sqlx.DB) *TodoRepository {
+	return &TodoRepository{conn: conn}
 }
 
 type Todo struct {
@@ -27,7 +27,7 @@ type Todo struct {
 	CompletedAt time.Time `db:"completed_at"`
 }
 
-func (t *TodoStorage) CreateTodo(todoDAO domain.TodoDAO) (int, error) {
+func (t *TodoRepository) CreateTodo(todoDAO domain.TodoDAO) (int, error) {
 	stmt := "INSERT INTO todos (title, description, completed, created_at, completed_at) VALUES (?,?,?,?,?)"
 
 	exec, err := t.conn.Exec(stmt, todoDAO.Title, todoDAO.Description, false, time.Now(), time.Now())
@@ -44,7 +44,7 @@ func (t *TodoStorage) CreateTodo(todoDAO domain.TodoDAO) (int, error) {
 	return int(id), nil
 }
 
-func (t *TodoStorage) GetTodoById(todoId int) (Todo, error) {
+func (t *TodoRepository) GetTodoById(todoId int) (Todo, error) {
 	todo := Todo{}
 	stmt := "SELECT id, title, description, completed, created_at, completed_at FROM todos WHERE id = ?"
 
@@ -59,7 +59,7 @@ func (t *TodoStorage) GetTodoById(todoId int) (Todo, error) {
 	return todo, nil
 }
 
-func (t *TodoStorage) CompleteTodo(todoId int) error {
+func (t *TodoRepository) CompleteTodo(todoId int) error {
 	stmt := "UPDATE todos SET completed = true, completed_at = NOW() WHERE id = ?"
 
 	exec, err := t.conn.Exec(stmt, todoId)

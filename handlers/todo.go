@@ -5,16 +5,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/vpovarna/go-todo-api/domain"
-	"github.com/vpovarna/go-todo-api/storage"
+	"github.com/vpovarna/go-todo-api/repository"
 	"net/http"
 	"strconv"
 )
 
 type TodoHandlers struct {
-	todoRepository *storage.TodoStorage
+	todoRepository *repository.TodoRepository
 }
 
-func NewTodoHandlers(todoRepository *storage.TodoStorage) *TodoHandlers {
+func NewTodoHandlers(todoRepository *repository.TodoRepository) *TodoHandlers {
 	return &TodoHandlers{todoRepository: todoRepository}
 }
 
