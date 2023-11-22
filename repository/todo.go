@@ -64,7 +64,7 @@ func (t *TodoRepository) CompleteTodo(todoId int) error {
 
 	exec, err := t.conn.Exec(stmt, todoId)
 	if err != nil {
-		log.Info("Unable to complete todo with id: ", todoId)
+		log.Warn("Unable to complete todo with id: ", todoId)
 		return err
 	}
 
@@ -73,5 +73,23 @@ func (t *TodoRepository) CompleteTodo(todoId int) error {
 		return err
 	}
 
+	return nil
+}
+
+func (t *TodoRepository) DeleteTodo(todoId int) error {
+	stmt := "DELETE todos WHERE id = ?"
+	exec, err := t.conn.Exec(stmt, todoId)
+
+	if err != nil {
+		log.Warn("Unable to delete todo with id: ", todoId)
+		return err
+	}
+
+	rowsAffected, err := exec.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	log.Info("Successfully deleted: ", rowsAffected)
 	return nil
 }

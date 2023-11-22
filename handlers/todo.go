@@ -104,3 +104,19 @@ func (h *TodoHandlers) CompleteTodo(c *fiber.Ctx) error {
 
 	return nil
 }
+
+func (h *TodoHandlers) DeleteTodo(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Warn("Invalid id: ", idStr)
+		_ = c.Status(http.StatusBadRequest).JSON(h.errorMessageResponse("Invalid id"))
+		return err
+	}
+
+	if err := h.todoRepository.DeleteTodo(id); err != nil {
+		return err
+	}
+
+	return nil
+}

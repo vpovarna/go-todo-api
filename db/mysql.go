@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2/log"
@@ -8,17 +9,19 @@ import (
 	"github.com/vpovarna/go-todo-api/config"
 )
 
-func CreateMySQLConnection(envVar config.ToDoServiceConfig) *sqlx.DB {
+// TODO: Add close function ?!
+func CreateMySQLConnection(ctx context.Context, envVar config.ToDoServiceConfig) *sqlx.DB {
 	mysqlDB := envVar.MysqlDB
 
 	dsm := fmt.Sprintf("%s:%s@(%s)/%s?parseTime=true", mysqlDB.Username, mysqlDB.Password, mysqlDB.Url, mysqlDB.DBName)
-	db, err := sqlx.Connect(
+	db, err := sqlx.ConnectContext(
+		ctx,
 		mysqlDB.Driver,
 		dsm,
 	)
 
 	if err != nil {
-		log.Fatal("Unable to db to the database. Error: %s", err)
+		log.Fatal("Unable to connect to the database. Error: %s", err)
 	}
 
 	err = db.Ping()
