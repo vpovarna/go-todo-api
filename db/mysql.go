@@ -9,8 +9,11 @@ import (
 	"github.com/vpovarna/go-todo-api/config"
 )
 
+// Can't this be injected as well? Do we need a struct?
+var ctx = context.Background()
+
 // TODO: Add close function ?!
-func CreateMySQLConnection(ctx context.Context, envVar config.ToDoServiceConfig) *sqlx.DB {
+func CreateMySQLConnection(envVar config.ToDoServiceConfig) *sqlx.DB {
 	mysqlDB := envVar.MysqlDB
 
 	dsm := fmt.Sprintf("%s:%s@(%s)/%s?parseTime=true", mysqlDB.Username, mysqlDB.Password, mysqlDB.Url, mysqlDB.DBName)
@@ -24,6 +27,7 @@ func CreateMySQLConnection(ctx context.Context, envVar config.ToDoServiceConfig)
 		log.Fatal("Unable to connect to the database. Error: %s", err)
 	}
 
+	//TODO: Move this to healthCheck handler ?!
 	err = db.Ping()
 	if err != nil {
 		log.Warn("DB is not ready. Error:", err)
